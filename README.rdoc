@@ -1,13 +1,10 @@
 Prevent the application from reloading in production by adding if development? so the line that requires sinatra/reloader:
 
 book_viewer.rb
-```
 require "sinatra/reloader" if development?
-```
 Specify a Ruby version in Gemfile so that Heroku knows the exact version of Ruby to use when serving the project:
 
 Gemfile
-```
 ruby "2.2.3"
 Add Puma to the application's Gemfile:
 
@@ -15,21 +12,16 @@ Gemfile
 group :production do
   gem "puma"
 end
-```
 Always run bundle install after making changes to a project's Gemfile.
 
 Create a config.ru file that tells the web server, which in this case will be Puma, how to start the application:
 
 config.ru
-```
 require "./todos"
 run Sinatra::Application
-```
 Create a file called Procfile in the root of the project with the following contents:
 
-```
 web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}
-```
 
 Use the heroku local command to boot the project locally in the same way that it will be once it's pushed to Heroku:
 
@@ -38,3 +30,12 @@ forego | starting web.1 on port 5000
 web.1  | Puma starting in single mode...
 web.1  | * Listening on tcp://0.0.0.0:5000
 web.1  | Use Ctrl-C to stop
+
+Create a Heroku application using heroku apps create:
+
+$ heroku apps:create ls-170-sinatra-todos
+Creating ls-170-sinatra-todos... done, stack is cedar-14
+https://ls-170-sinatra-todos.herokuapp.com/ | https://git.heroku.com/ls-170-sinatra-todos.git
+Git remote heroku added
+Push the project to the new Heroku application using git push heroku master.
+Visit your application and verify that everything is working.
